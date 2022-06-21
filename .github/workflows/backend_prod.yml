@@ -1,15 +1,23 @@
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      build_number:
+        description: "Build number"
+        required: true
+        default: ""
 
 name: Energeo CI on ECR
 
 jobs:
-  deploy:
+  deploy_back:
     name: Deploy
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Display build number
+        run: echo "Deploying build ${{ github.event.inputs.build_number }} to dev"
+          
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -23,7 +31,7 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      
+
       - name: Get color
         run: echo ${{ steps.login-ecr.outputs.registry }}
 
@@ -32,11 +40,10 @@ jobs:
         env:
           ECR_REGISTRY: 205816504133.dkr.ecr.us-east-1.amazonaws.com
           ECR_REPOSITORY: energeo
-          IMAGE_TAG: 1.0
         run: |
           # Build a docker container and push it to ECR 
           cd back
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }} .
           echo "Pushing image to ECR..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
