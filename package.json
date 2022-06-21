@@ -1,0 +1,11 @@
+{
+  "name": "nerenco-crm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ekuchera/nerenco-crm.git",
+  "author": "ekuchera <eugene.kuchera@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "codegen": "cd front && yarn codegen && cd ../back && yarn codegen"
+  }
+}

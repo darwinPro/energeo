@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+  mongo:
+    image: "mongo:4.2.2"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_SERVER: mongo
+  back:
+    build:
+      context: ./back
+    command: yarn dev
+    environment:
+      GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+      PORT: $BACK_PORT
+      DATABASE_URL: $DATABASE_URL
+      SECRET_KEY: $SECRET_KEY
+      AWS_REGION: $AWS_REGION
+      AWS_BUCKET: $AWS_BUCKET
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+    ports:
+      - $BACK_PORT:$BACK_PORT
+    volumes:
+      - ./back:/app
+      - /app/node_modules
+  front:
+    build:
+      context: ./front
+      args:
+        NEXT_PUBLIC_BACKEND_URL: $BACK_URL
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+    command: yarn dev
+    environment:
+      PORT: $FRONT_PORT
+      NEXT_PUBLIC_BACKEND_URL: $BACK_URL
+      NEXT_PUBLIC_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+    ports:
+      - $FRONT_PORT:$FRONT_PORT
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"

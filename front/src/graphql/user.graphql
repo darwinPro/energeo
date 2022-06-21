@@ -1,0 +1,46 @@
+query User($token: String!) {
+  user(token: $token) {
+    token
+    user {
+      id
+      googleId
+      firstName
+      lastName
+      email
+      role
+      state
+    }
+  }
+}
+
+query Users {
+  users {
+    users {
+      id
+      googleId
+      firstName
+      lastName
+      email
+      role
+      state
+    }
+  }
+}
+
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    createdUser {
+      id
+    }
+  }
+}
+
+mutation UpdateUser($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    updatedUser {
+      id
+    }
+  }
+}
+
+

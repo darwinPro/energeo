@@ -1,0 +1,101 @@
+query Clients {
+  clients {
+    clients {
+      id
+      name
+      salesId
+      sales {
+        id
+        googleId
+        firstName
+        lastName
+        email
+        role
+      }
+      address
+      programmedVisitDate
+      billType
+      siret
+      revenue
+      validationDate
+      contractStartDate
+      contractEndDate
+      paimentReceptionDate
+      contact {
+        firstName
+        lastName
+        phone
+        email
+        birthDate
+      }
+      state
+      files {
+        id
+        name
+        fileUrl
+      }
+    }
+  }
+}
+
+query Client($input: ClientsInput) {
+  clients(input: $input) {
+    clients {
+      id
+      name
+      salesId
+      sales {
+        id
+        googleId
+        firstName
+        lastName
+        email
+        role
+      }
+      address
+      programmedVisitDate
+      billType
+      siret
+      revenue
+      validationDate
+      contractStartDate
+      contractEndDate
+      paimentReceptionDate
+      contact {
+        firstName
+        lastName
+        phone
+        email
+        birthDate
+      }
+      state
+      files {
+        id
+        name
+        fileUrl
+      }
+    }
+  }
+}
+
+mutation CreateClient($input: CreateClientInput!) {
+  createClient(input: $input) {
+    createdClient {
+      id
+    }
+  }
+}
+
+mutation UpdateClient($input: UpdateClientInput!) {
+  updateClient(input: $input) {
+    updatedClient {
+      id
+    }
+  }
+}
+
+mutation DeleteFile($input: DeleteClientFileInput!) {
+  deleteClientFile(input: $input) {
+    deletedFileId
+  }
+}
