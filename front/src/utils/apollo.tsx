@@ -12,7 +12,7 @@ let token: string = null;
 export const setToken = (newToken: string) => (token = newToken);
 
 const httpLink = createHttpLink({
-  uri: new URL("/graphql", backendUrl).href,
+  uri: `${backendUrl}/graphql`,
   fetch: (uri, options) => {
     const { operationName } = JSON.parse(options.body.toString());
     return fetch(`${uri}?operationName=${operationName}`, options);
