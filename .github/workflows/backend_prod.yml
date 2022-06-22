@@ -44,10 +44,20 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
 
+      - name: AWS token and authenticate your Docker client
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
+          username: ${{ secrets.EC2_INSTANCE_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 205816504133.dkr.ecr.us-east-1.amazonaws.com
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ec2-18-233-0-129.compute-1.amazonaws.com
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
           username: ${{ secrets.EC2_INSTANCE_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
@@ -105,10 +115,20 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
 
+      - name: AWS token and authenticate your Docker client
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
+          username: ${{ secrets.EC2_INSTANCE_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 205816504133.dkr.ecr.us-east-1.amazonaws.com
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ec2-18-233-0-129.compute-1.amazonaws.com
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
           username: ${{ secrets.EC2_INSTANCE_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
