@@ -44,6 +44,17 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
 
+       - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
+          username: ubuntu
+          password: 
+          port: 22
+          script: |
+            echo "mierda" > testfile
+
+
       - uses: actions/checkout@v2
       - name: Deploy back in EC2
         env:
@@ -68,8 +79,6 @@ jobs:
 
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/app/energeo &&
-
-            ssh-keygen -R 54.82.237.57 &&
 
             docker stop energeo_back_prod &&
 
