@@ -114,7 +114,7 @@ jobs:
           port: 22
           script: |
             echo "Stop energeo_front_prod container" &&
-             docker run \
+            docker run \
               --rm \
               -d \
               -p 2992:3000 \
