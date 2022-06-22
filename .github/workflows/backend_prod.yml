@@ -6,7 +6,7 @@ on:
         required: true
         default: ""
 
-name: s
+name: Build PROD
 
 jobs:
   deploy_back:
