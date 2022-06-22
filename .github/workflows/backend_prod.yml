@@ -44,16 +44,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
 
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ec2-107-22-36-33.compute-1.amazonaws.com
-          username: ec2-user
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo "mierda" > testfile
-
+     
 
       - uses: actions/checkout@v2
       - name: Deploy back in EC2
@@ -75,7 +66,7 @@ jobs:
 
         run: |
           echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -i private_key ${EC2_INSTANCE_USERNAME}@${EC2_INSTANCE_HOST} '
+          ssh -i private_key ec2-user@ec2-107-22-36-33.compute-1.amazonaws.com '
 
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/app/energeo &&
