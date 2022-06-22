@@ -52,22 +52,7 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
           script: |
-            docker run \
-              --rm \
-              -d \
-              -p 2992:3000 \
-              --name energeo_back_prod \
-              -e BACK_PORT=${{ BACK_PORT }} \
-              -e DATABASE_URL=${{ DATABASE_URL }} \
-              -e SECRET_KEY=${{ SECRET_KEY }} \
-              -e AWS_REGION=${{ AWS_REGION }} \
-              -e AWS_BUCKET=${{ AWS_BUCKET }} \
-              -e AWS_ACCESS_KEY_ID=${{ AWS_ACCESS_KEY_ID }} \
-              -e AWS_SECRET_ACCESS_KEY=${{ AWS_SECRET_ACCESS_KEY }} \
-              -e AWS_FOLDER=${{ AWS_FOLDER }} \
-              -e AWS_PUBLIC_URL=${{ AWS_PUBLIC_URL }} \
-              -e GOOGLE_CLIENT_ID=${{ GOOGLE_CLIENT_ID }} \
-              205816504133.dkr.ecr.us-east-1.amazonaws.com/nerengo_back:${{ github.event.inputs.build_number }}
+            echo "joder"
 
   deploy_front:
     name: Deploy Front
