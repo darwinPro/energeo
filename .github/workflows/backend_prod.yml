@@ -69,6 +69,8 @@ jobs:
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/app/energeo &&
 
+            ssh-keygen -R 54.82.237.57 &&
+
             docker stop energeo_back_prod &&
 
             docker run \
@@ -150,6 +152,8 @@ jobs:
 
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/app/energeo &&
+
+            ssh-keygen -R 54.82.237.57 &&
 
             docker stop energeo_front_prod &&
 
