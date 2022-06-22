@@ -13,41 +13,13 @@ jobs:
     name: Deploy Back
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Display build number
-        run: echo "Deploying build back ${{ github.event.inputs.build_number }} to dev"
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build, tag, and push the image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: 205816504133.dkr.ecr.us-east-1.amazonaws.com
-          ECR_REPOSITORY: nerengo_back
-        run: |
-          # Build a docker container and push it back to ECR 
-          cd back
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }} .
-          echo "Pushing image to ECR..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
+   
 
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ec2-107-22-36-33.compute-1.amazonaws.com
+          password: ${{ secrets.EC2_INSTANCE_PASS }}
           username: ${{ secrets.EC2_INSTANCE_USERNAME }}
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
