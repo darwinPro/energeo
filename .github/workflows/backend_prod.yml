@@ -31,7 +31,18 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      
+      - name: Build, tag, and push the image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: 205816504133.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REPOSITORY: nerengo_back
+        run: |
+          # Build a docker container and push it back to ECR 
+          cd back
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }} .
+          echo "Pushing image to ECR..."
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
 
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -41,52 +52,23 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "mierda" > testfile
-
-      - uses: actions/checkout@v2
-      - name: Deploy back in EC2
-        env:
-          BACK_PORT: ${{ secrets.BACK_PORT  }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL  }}
-          SECRET_KEY: ${{ secrets.DATABASE_SECRET_KEY  }}
-          AWS_REGION: ${{ secrets.AWS_REGION  }}
-          AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_FOLDER: ${{ secrets.AWS_FOLDER }}
-          AWS_PUBLIC_URL: ${{ secrets.AWS_PUBLIC_URL }}
-
-          AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-          EC2_INSTANCE_HOST: ${{ secrets.EC2_INSTANCE_HOST  }}
-          EC2_INSTANCE_USERNAME: ${{ secrets.EC2_INSTANCE_USERNAME  }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-
-        run: |
-          echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -i private_key ec2-user@ec2-107-22-36-33.compute-1.amazonaws.com '
-
-            #Now we have got the access of EC2 and we will start the deploy .
-            cd /home/ubuntu/app/energeo &&
-
-            docker stop energeo_back_prod &&
-
+            echo "Stop energeo_back_prod container" &&
             docker run \
               --rm \
               -d \
               -p 2992:3000 \
               --name energeo_back_prod \
-              -e BACK_PORT=${BACK_PORT} \
-              -e DATABASE_URL=${DATABASE_URL} \
-              -e SECRET_KEY=${SECRET_KEY} \
-              -e AWS_REGION=${AWS_REGION} \
-              -e AWS_BUCKET=${AWS_BUCKET} \
-              -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
-              -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
-              -e AWS_FOLDER=${AWS_FOLDER} \
-              -e AWS_PUBLIC_URL=${AWS_PUBLIC_URL} \
-              -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \
+              -e BACK_PORT=${{ BACK_PORT }} \
+              -e DATABASE_URL=${{ DATABASE_URL }} \
+              -e SECRET_KEY=${{ SECRET_KEY }} \
+              -e AWS_REGION=${{ AWS_REGION }} \
+              -e AWS_BUCKET=${{ AWS_BUCKET }} \
+              -e AWS_ACCESS_KEY_ID=${{ AWS_ACCESS_KEY_ID }} \
+              -e AWS_SECRET_ACCESS_KEY=${{ AWS_SECRET_ACCESS_KEY }} \
+              -e AWS_FOLDER=${{ AWS_FOLDER }} \
+              -e AWS_PUBLIC_URL=${{ AWS_PUBLIC_URL }} \
+              -e GOOGLE_CLIENT_ID=${{ GOOGLE_CLIENT_ID }} \
               205816504133.dkr.ecr.us-east-1.amazonaws.com/nerengo_back:${{ github.event.inputs.build_number }}
-          '
 
   deploy_front:
     name: Deploy Front
@@ -123,45 +105,22 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
 
-      - uses: actions/checkout@v2
-      - name: Deploy front in EC2
-        env:
-          FRONT_PORT: ${{ secrets.FRONT_PORT  }}
-          NODE_ENV: production
-          BACK_URL: ${{ secrets.BACK_URL  }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL  }}
-          SECRET_KEY: ${{ secrets.DATABASE_SECRET_KEY  }}
-          AWS_REGION: ${{ secrets.AWS_REGION  }}
-          AWS_BUCKET: ${{ secrets.AWS_BUCKET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_FOLDER: ${{ secrets.AWS_FOLDER }}
-          AWS_PUBLIC_URL: ${{ secrets.AWS_PUBLIC_URL }}
-
-          AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-          EC2_INSTANCE_HOST: ${{ secrets.EC2_INSTANCE_HOST  }}
-          EC2_INSTANCE_USERNAME: ${{ secrets.EC2_INSTANCE_USERNAME  }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-
-        run: |
-          echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -i private_key ${EC2_INSTANCE_USERNAME}@${EC2_INSTANCE_HOST} '
-
-            #Now we have got the access of EC2 and we will start the deploy .
-            cd /home/ubuntu/app/energeo &&
-
-            ssh-keygen -R 54.82.237.57 &&
-
-            docker stop energeo_front_prod &&
-
-            docker run \
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-18-233-0-129.compute-1.amazonaws.com
+          username: ${{ secrets.EC2_INSTANCE_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "Stop energeo_front_prod container" &&
+             docker run \
               --rm \
               -d \
               -p 2992:3000 \
               --name energeo_front_prod \
-              -e FRONT_PORT=${FRONT_PORT} \
-              -e NODE_ENV=${NODE_ENV} \
-              -e BACK_URL=${BACK_URL} \
-              -e GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID} \
+              -e FRONT_PORT=${{ FRONT_PORT }} \
+              -e NODE_ENV=${{ NODE_ENV }} \
+              -e BACK_URL=${{ BACK_URL }} \
+              -e GOOGLE_CLIENT_ID=${{ GOOGLE_CLIENT_ID }} \
               205816504133.dkr.ecr.us-east-1.amazonaws.com/energeo_front:${{ github.event.inputs.build_number }}
-          '
