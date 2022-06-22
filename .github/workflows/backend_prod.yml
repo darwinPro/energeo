@@ -113,14 +113,4 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "Stop energeo_front_prod container" &&
-            docker run \
-              --rm \
-              -d \
-              -p 2992:3000 \
-              --name energeo_front_prod \
-              -e FRONT_PORT=${{ FRONT_PORT }} \
-              -e NODE_ENV=${{ NODE_ENV }} \
-              -e BACK_URL=${{ BACK_URL }} \
-              -e GOOGLE_CLIENT_ID=${{ GOOGLE_CLIENT_ID }} \
-              205816504133.dkr.ecr.us-east-1.amazonaws.com/energeo_front:${{ github.event.inputs.build_number }}
+            echo "Stop energeo_front_prod container"
