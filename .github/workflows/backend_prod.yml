@@ -49,7 +49,7 @@ jobs:
         with:
           host: ec2-107-22-36-33.compute-1.amazonaws.com
           username: ${{ secrets.EC2_INSTANCE_USERNAME }}
-          password: ${{ secrets.EC2_INSTANCE_PASS }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
           port: 22
           script: |
             echo "mierda" > testfile
