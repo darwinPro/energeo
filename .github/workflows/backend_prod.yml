@@ -64,7 +64,7 @@ jobs:
 
         run: |
           echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${EC2_INSTANCE_USERNAME}@${EC2_INSTANCE_HOST} '
+          ssh -i private_key ${EC2_INSTANCE_USERNAME}@${EC2_INSTANCE_HOST} '
 
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/app/energeo &&
@@ -148,7 +148,7 @@ jobs:
 
         run: |
           echo "$AWS_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${EC2_INSTANCE_USERNAME}@${EC2_INSTANCE_HOST} '
+          ssh -i private_key ${EC2_INSTANCE_USERNAME}@${EC2_INSTANCE_HOST} '
 
             #Now we have got the access of EC2 and we will start the deploy .
             cd /home/ubuntu/app/energeo &&
