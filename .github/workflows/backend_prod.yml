@@ -6,7 +6,7 @@ on:
         required: true
         default: ""
 
-name: Build images to ECR
+name: s
 
 jobs:
   deploy_back:
