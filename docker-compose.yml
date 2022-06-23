@@ -21,7 +21,7 @@ services:
     command: yarn dev
     environment:
       GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
-      PORT: $BACK_PORT
+      BACK_PORT: $BACK_PORT
       DATABASE_URL: $DATABASE_URL
       SECRET_KEY: $SECRET_KEY
       AWS_REGION: $AWS_REGION
@@ -41,7 +41,7 @@ services:
         NEXT_PUBLIC_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
     command: yarn dev
     environment:
-      PORT: $FRONT_PORT
+      FRONT_PORT: $FRONT_PORT
       NEXT_PUBLIC_BACKEND_URL: $BACK_URL
       NEXT_PUBLIC_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
     ports:
