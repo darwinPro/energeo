@@ -54,6 +54,16 @@ jobs:
           script: |
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 205816504133.dkr.ecr.us-east-1.amazonaws.com
 
+      - name: Stop container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
+          username: ${{ secrets.EC2_INSTANCE_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker stop energeo_back_prod || echo ok
+
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
@@ -126,6 +136,16 @@ jobs:
           port: 22
           script: |
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 205816504133.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Stop container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_INSTANCE_HOST }}
+          username: ${{ secrets.EC2_INSTANCE_USERNAME }}
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker stop energeo_front_prod || echo ok
 
       - name: Deploy
         uses: appleboy/ssh-action@master
