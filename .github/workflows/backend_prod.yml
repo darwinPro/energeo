@@ -64,12 +64,11 @@ jobs:
           script: |
             echo "Stop energeo_back_prod container" &&
 
-            docker stop energeo_back_prod &&
-
             docker run \
               --rm \
               -d \
               -p 2992:3000 \
+              --net local \
               --name energeo_back_prod \
               -e BACK_PORT=${{ secrets.BACK_PORT }} \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
@@ -138,12 +137,11 @@ jobs:
           script: |
             echo "Stop energeo_front_prod container" &&
 
-            
-
             docker run \
               --rm \
               -d \
               -p 3000:3000 \
+              --net local \
               --name energeo_front_prod \
               -e FRONT_PORT=3000 \
               -e BACKEND_URL=http://localhost:3001/ \
