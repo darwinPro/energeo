@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "build": "tsc",
     "dev": "nodemon --exec ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "codegen": "graphql-codegen --config codegen.yml"
