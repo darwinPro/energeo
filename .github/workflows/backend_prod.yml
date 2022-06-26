@@ -78,7 +78,7 @@ jobs:
               --rm \
               -d \
               -p 2992:3000 \
-              --net local \
+              --net localhost \
               --name energeo_back_prod \
               -e BACK_PORT=${{ secrets.BACK_PORT }} \
               -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
@@ -161,7 +161,7 @@ jobs:
               --rm \
               -d \
               -p 3000:3000 \
-              --net local \
+              --net localhost \
               --name energeo_front_prod \
               -e FRONT_PORT=3000 \
               -e BACKEND_URL=http://localhost:3001/ \
