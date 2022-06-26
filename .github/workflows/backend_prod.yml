@@ -39,7 +39,7 @@ jobs:
         run: |
           # Build a docker container and push it back to ECR 
           cd back
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }} .
+          docker build -t energeo_back_prod:${{ github.event.inputs.build_number }} .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
@@ -122,7 +122,7 @@ jobs:
         run: |
           # Build a docker container and push it front to ECR 
           cd front
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }} .
+          docker build -t energeo_front_prod:${{ github.event.inputs.build_number }} .
           echo "Pushing image to ECR..."
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${{ github.event.inputs.build_number }}"
