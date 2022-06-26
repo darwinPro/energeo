@@ -39,8 +39,7 @@ const ContainerDiv = styled.div`
 `;
 
 const User = () => {
-  const { isAuthenticated, user, login, logout, loading } =
-    useUser();
+  const { isAuthenticated, user, login, logout, loading } = useUser();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null

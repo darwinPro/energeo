@@ -36,23 +36,13 @@ services:
   front:
     build:
       context: ./front
-      args:
-        NEXT_PUBLIC_BACKEND_URL: $BACK_URL
-        NEXT_PUBLIC_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
     command: yarn dev
     environment:
       FRONT_PORT: $FRONT_PORT
-      NEXT_PUBLIC_BACKEND_URL: $BACK_URL
-      NEXT_PUBLIC_GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+      BACK_URL: $BACK_URL
+      GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
     ports:
       - $FRONT_PORT:$FRONT_PORT
     volumes:
       - ./front:/app
       - /app/node_modules
-
-  nginx:
-    restart: always
-    build:
-      context: ./nginx
-    ports:
-      - "80:80"

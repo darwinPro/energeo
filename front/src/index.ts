@@ -4,7 +4,9 @@ import path from "path";
 import morgan from "morgan";
 import { json } from "body-parser";
 import cookieParser from "cookie-parser";
-import { port, dev } from "./utils/env";
+
+const port = process.env.FRONT_PORT;
+const dev = process.env.NODE_ENV !== "production";
 
 const app = express();
 const nextApp = next({ dev });

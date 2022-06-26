@@ -5,7 +5,10 @@
     "outDir": "dist",
     "target": "es2017",
     "isolatedModules": false,
-    "noEmit": false
+    "noEmit": false,
+    "incremental": true
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/index.ts"
+  ]
 }

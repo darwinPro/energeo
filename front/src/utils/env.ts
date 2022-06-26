@@ -1,7 +1,11 @@
-const env = process.env;
+// We can't use getConfig before next(...) is ran in the custom server.
+import getConfig from "next/config";
 
-export const port = parseInt(env.FRONT_PORT || "3000", 10);
-export const nodeEnv = env.NODE_ENV;
+
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+
+export const port = parseInt(serverRuntimeConfig.port || "3000", 10);
+export const nodeEnv = publicRuntimeConfig.nodeEnv;
 export const dev = nodeEnv !== "production";
-export const backendUrl = env.NEXT_PUBLIC_BACKEND_URL;
-export const googleClientId = env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+export const backendUrl = publicRuntimeConfig.backendUrl;
+export const googleClientId = publicRuntimeConfig.googleClientId;
