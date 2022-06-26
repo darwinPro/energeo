@@ -81,7 +81,7 @@ jobs:
               --net localhost \
               --name energeo_back_prod \
               -e BACK_PORT=${{ secrets.BACK_PORT }} \
-              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              -e DATABASE_URL=${{ secrets.BACK_DATABASE_URL_PROD }} \
               -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
               -e AWS_REGION=${{ secrets.AWS_REGION }} \
               -e AWS_BUCKET=${{ secrets.AWS_BUCKET }} \
@@ -163,7 +163,7 @@ jobs:
               -p 3000:3000 \
               --net localhost \
               --name energeo_front_prod \
-              -e FRONT_PORT=3000 \
-              -e BACKEND_URL=http://localhost:3001/ \
-              -e GOOGLE_CLIENT_ID=982924184000-39oshbvc7iudnoclnlc2kmbsu1lt18aa.apps.googleusercontent.com \
+              -e FRONT_PORT=${{ secrets.FRONT_PORT }} \
+              -e BACK_URL=${{ secrets.BACK_URL }} \
+              -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
               205816504133.dkr.ecr.us-east-1.amazonaws.com/energeo_front:${{ github.event.inputs.build_number }}
